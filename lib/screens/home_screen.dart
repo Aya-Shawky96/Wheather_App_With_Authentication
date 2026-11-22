@@ -10,12 +10,7 @@ class WeatherPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          "Weather App",
-          style: TextStyle(
-            color: Colors.white,
-          ),
-        ),
+        title: const Text("Weather App", style: TextStyle(color: Colors.white)),
         centerTitle: true,
         backgroundColor: Colors.deepOrange,
       ),
@@ -38,23 +33,26 @@ class WeatherPage extends StatelessWidget {
                       width: 50,
                       height: 50,
                       child: Image.network(
-                        country["countryImageUrl"],
+                        country.countryImageUrl,
                         fit: BoxFit.cover,
                         errorBuilder: (context, error, stackTrace) {
-                          return const Icon(Icons.flag, size: 40, color: Colors.red);
+                          return const Icon(
+                            Icons.flag,
+                            size: 40,
+                            color: Colors.red,
+                          );
                         },
                       ),
                     ),
-                    title: Text(country["name"]),
-                    subtitle: Text(
-                      '${country["tempreature"]}°C',
-                    ),
+                    title: Text(country.name),
+                    subtitle: Text('${country.tempreature}°C'),
 
                     onTap: () {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => CountryDetailScreen(country: country),
+                          builder: (context) =>
+                              CountryDetailScreen(country: country),
                         ),
                       );
                     },
@@ -68,4 +66,3 @@ class WeatherPage extends StatelessWidget {
     );
   }
 }
-

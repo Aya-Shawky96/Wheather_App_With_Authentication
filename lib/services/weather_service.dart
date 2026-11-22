@@ -8,11 +8,11 @@ class WeatherService {
       final response = await dio.get(
         'https://iats.runasp.net/api/Country/GetCountries',
       );
-      print(response.data);
-
       return WeatherModel.fromJson(response.data);
-    } catch (e) {
-      throw Exception('Failed to fetch weather data: $e');
+    } on DioException catch (dioException) {
+      throw Exception("Failed to fetch weather data: ${dioException.message}");
+    } catch (other) {
+      throw Exception('Other Exception: ${other.toString()}');
     }
   }
 }

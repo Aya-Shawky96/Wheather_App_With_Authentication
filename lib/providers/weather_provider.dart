@@ -6,13 +6,7 @@ class WeatherProvider extends ChangeNotifier {
   WeatherModel? weatherModel;
 
   Future<void> fetchWeather() async {
-      weatherModel = await WeatherService.getWeather();
-      print("FETCH CALLED");
-      notifyListeners();
-
+    weatherModel = await WeatherService.getWeather();
+    notifyListeners();
   }
 }
-
-//? VS !
-//? -> may be null
-//! -> MUST be value if don`t have value app will crash

@@ -1,14 +1,40 @@
-class WeatherModel {
- List<dynamic>country;
+class CountryModel {
+  final int id;
+  final String name;
+  final String tempreature;
+  final String weatherImageUrl;
+  final String countryImageUrl;
+  final String weatherCondition;
 
-  WeatherModel({
-    required this.country,
-
+  CountryModel({
+    required this.id,
+    required this.name,
+    required this.tempreature,
+    required this.weatherImageUrl,
+    required this.countryImageUrl,
+    required this.weatherCondition,
   });
+}
+
+class WeatherModel {
+  List<CountryModel> country;
+
+  WeatherModel({required this.country});
 
   factory WeatherModel.fromJson(Map<String, dynamic> json) {
-    return WeatherModel(
-      country: json["country"],
-    );
+    final tempList = json["country"]
+        .map<CountryModel>(
+          (country) => CountryModel(
+            id: country["id"],
+            name: country["name"],
+            tempreature: country["tempreature"],
+            weatherImageUrl: country["weatherImageUrl"],
+            countryImageUrl: country["countryImageUrl"],
+            weatherCondition: country["weatherCondition"],
+          ),
+        )
+        .toList();
+
+    return WeatherModel(country: tempList);
   }
 }

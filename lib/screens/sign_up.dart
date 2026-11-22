@@ -11,83 +11,78 @@ class SignUpScreen extends StatelessWidget {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController phoneController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
-  final TextEditingController textdController = TextEditingController();
 
   SignUpScreen({super.key});
 
-
   @override
   Widget build(BuildContext context) {
-    var registrationProviderObject =
-        Provider.of<RegistrationProvider>(context, listen: false);
+    final registrationProviderObject = context.read<RegistrationProvider>();
     return Scaffold(
       appBar: AppBar(
         title: const Center(
-          child: Text(
-            "Signup",
-            style: TextStyle(fontSize: 24),
-          ),
+          child: Text("Signup", style: TextStyle(fontSize: 24)),
         ),
-
       ),
       body: Form(
         key: formKey,
         child: Column(
           children: [
             CustomTextFormField(
-                controller: nameController,
-                label: "User Name",
-                suffixIcon: Icon(Icons.person),
-                ),
+              controller: nameController,
+              label: "User Name",
+              suffixIcon: Icon(Icons.person),
+            ),
             CustomTextFormField(
-                controller: phoneController,
-                label: "Phone",
-                suffixIcon: Icon(Icons.phone),
-                ),
+              controller: phoneController,
+              label: "Phone",
+              suffixIcon: Icon(Icons.phone),
+            ),
             CustomTextFormField(
               controller: emailController,
               label: "Email",
               suffixIcon: Icon(Icons.email),
-
             ),
             CustomTextFormField(
               controller: passwordController,
               label: "Password",
               suffixIcon: Icon(Icons.lock),
               obscureText: true,
-
             ),
 
             const SizedBox(height: 10),
             // Signup button
             TextButton(
-                onPressed: () async {
-                  if (formKey.currentState!.validate()) {
-                    await registrationProviderObject.signUpDataProvider(
-                        email: emailController.text,
-                        password: passwordController.text,
+              onPressed: () async {
+                if (!formKey.currentState!.validate()) return;
+
+                final success = await registrationProviderObject
+                    .signUpDataProvider(
+                      email: emailController.text,
+                      password: passwordController.text,
                       name: nameController.text,
                       phone: phoneController.text,
-
                     );
-                  }
+                if (!context.mounted) return;
 
-                  ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text(registrationProviderObject
-                      .registrationModel!.message)));
-                  if (registrationProviderObject.registrationModel?.status ==
-                      true) {
-                    print(registrationProviderObject
-                        .registrationModel?.message);
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(
+                      registrationProviderObject.registrationModel?.message ??
+                          'Please try again',
+                    ),
+                    backgroundColor: success ? Colors.green : Colors.deepOrange,
+                  ),
+                );
 
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => LoginScreen(),
-                        ));
-                  }
-                },
-                child: Text("Sign Up")),
+                if (success) {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => LoginScreen()),
+                  );
+                }
+              },
+              child: Text("Sign Up"),
+            ),
             // Already have an account?
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -95,11 +90,17 @@ class SignUpScreen extends StatelessWidget {
                 const Text("Already have an account?"),
                 TextButton(
                   onPressed: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => LoginScreen(),)) ;                },
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => LoginScreen()),
+                    );
+                  },
                   child: const Text(
                     "Login",
                     style: TextStyle(
-                        color: Colors.blue, fontWeight: FontWeight.bold),
+                      color: Colors.blue,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
               ],
