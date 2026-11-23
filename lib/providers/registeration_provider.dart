@@ -5,19 +5,33 @@ import '../services/regestration_service.dart';
 class RegistrationProvider extends ChangeNotifier {
   RegistrationModel? registrationModel;
 
-  Future<void> loginDataProvider({required String email, required String password}) async {
-    registrationModel =
-        await RegistrationServices.loginData(email: email, password: password);
-    notifyListeners();
+  Future<bool> loginDataProvider({
+    required String email,
+    required String password,
+  }) async {
+    final temp = await RegistrationServices.loginData(
+      email: email,
+      password: password,
+    );
+    registrationModel = temp;
+
+    return temp.status;
   }
 
-  Future<void> signUpDataProvider(
-      {required String email,
-      required String password,
-      required String name,
-      required String phone}) async {
-    registrationModel = await RegistrationServices.signUpData(
-        email: email, password: password, name: name, phone: phone);
-    notifyListeners();
+  Future<bool> signUpDataProvider({
+    required String email,
+    required String password,
+    required String name,
+    required String phone,
+  }) async {
+    final temp = await RegistrationServices.signUpData(
+      email: email,
+      password: password,
+      name: name,
+      phone: phone,
+    );
+    registrationModel = temp;
+
+    return temp.status;
   }
 }
